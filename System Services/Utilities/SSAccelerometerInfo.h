@@ -5,12 +5,13 @@
 //  Created by Shmoopi LLC on 9/20/12.
 //  Copyright (c) 2012 Shmoopi LLC. All rights reserved.
 //
+@import UIKit;
 
 #import "SystemServicesConstants.h"
 
 @interface SSAccelerometerInfo : NSObject {
     CMMotionManager *motionManager;
-    
+
     NSOperationQueue *deviceMotionQueue;
     NSOperationQueue *accelQueue;
     NSOperationQueue *gyroQueue;
