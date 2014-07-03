@@ -16,7 +16,7 @@
 + (NSString *)systemUptime {
     // Set up the days/hours/minutes
     NSNumber *Days, *Hours, *Minutes;
-    
+
     // Get the info about a process
     NSProcessInfo * processInfo = [NSProcessInfo processInfo];
 	// Get the uptime of the system
@@ -25,27 +25,27 @@
     NSCalendar *Calendar = [NSCalendar currentCalendar];
 	// Create the Dates
     NSDate *Date = [[NSDate alloc] initWithTimeIntervalSinceNow:(0-UptimeInterval)];
-    unsigned int unitFlags = NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
+    unsigned int unitFlags = NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute;
     NSDateComponents *Components = [Calendar components:unitFlags fromDate:Date toDate:[NSDate date]  options:0];
-	
+
     // Get the day, hour and minutes
     Days = [NSNumber numberWithInt:[Components day]];
     Hours = [NSNumber numberWithInt:[Components hour]];
     Minutes = [NSNumber numberWithInt:[Components minute]];
-	
+
     // Format the dates
 	NSString *Uptime = [NSString stringWithFormat:@"%@ %@ %@",
                                [Days stringValue],
                                [Hours stringValue],
                                [Minutes stringValue]];
-    
+
     // Error checking
     if (!Uptime) {
         // No uptime found
         // Return nil
         return nil;
     }
-    
+
     // Return the uptime
     return Uptime;
 }
@@ -110,7 +110,7 @@
 + (NSString *)systemDeviceTypeFormatted:(BOOL)formatted {
     // Set up a Device Type String
     NSString *DeviceType;
-    
+
     // Check if it should be formatted
     if (formatted) {
         // Formatted
@@ -123,7 +123,7 @@
             uname(&DT);
             // Set the device type to the machine type
             DeviceType = [NSString stringWithFormat:@"%s", DT.machine];
-            
+
             if ([DeviceType isEqualToString:@"i386"])
                 NewDeviceType = @"iPhone Simulator";
             else if ([DeviceType isEqualToString:@"iPhone1,1"])
@@ -156,7 +156,7 @@
                 NewDeviceType = @"iPad 4";
             else if ([DeviceType hasPrefix:@"iPad"])
                 NewDeviceType = @"iPad";
-            
+
             // Return the new device type
             return NewDeviceType;
         }
@@ -173,7 +173,7 @@
             uname(&DT);
             // Set the device type to the machine type
             DeviceType = [NSString stringWithFormat:@"%s", DT.machine];
-            
+
             // Return the device type
             return DeviceType;
         }
@@ -197,7 +197,7 @@
             // Invalid Width
             return -1;
         }
-        
+
         // Successful
         return Width;
     }
@@ -220,7 +220,7 @@
             // Invalid Height
             return -1;
         }
-        
+
         // Successful
         return Height;
     }
@@ -241,7 +241,7 @@
             // Invalid brightness
             return -1;
         }
-        
+
         // Successful
         return (brightness * 100);
     }
@@ -271,10 +271,10 @@
     if ([[UIDevice currentDevice] respondsToSelector:@selector(setProximityMonitoringEnabled:)]) {
         // Create a UIDevice variable
         UIDevice *device = [UIDevice currentDevice];
-        
+
         // Make a Bool for the proximity Sensor
         BOOL ProximitySensor;
-        
+
         // Turn the sensor on, if not already on, and see if it works
         if (device.proximityMonitoringEnabled != YES) {
             // Sensor is off
@@ -294,7 +294,7 @@
             // Sensor is already on
             ProximitySensor = true;
         }
-        
+
         // Return on or off
         return ProximitySensor;
     } else {
@@ -311,19 +311,19 @@
         size_t size = sizeof(struct kinfo_proc); struct kinfo_proc info;
         int ret = 0, name[4];
         memset(&info, 0, sizeof(struct kinfo_proc));
-        
+
         // Get the process information
         name[0] = CTL_KERN;
         name[1] = KERN_PROC;
         name[2] = KERN_PROC_PID; name[3] = getpid();
-        
+
         // Check to make sure the variables are correct
         if (ret == (sysctl(name, 4, &info, &size, NULL, 0))) {
             // Sysctl() failed
             // Return the output of sysctl
             return ret;
         }
-        
+
         // Return whether or not we're being debugged
         return (info.kp_proc.p_flag & P_TRACED) ? 1 : 0;
     }
