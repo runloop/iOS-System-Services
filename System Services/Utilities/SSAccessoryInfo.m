@@ -35,6 +35,8 @@
     }
 }
 
+// todo: remove diagnostic ignore and do properly
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 // Are headphone attached?
 + (BOOL)headphonesAttached {
     // Check if the headphones are connected
@@ -50,7 +52,6 @@
         }
         // Get the range
         NSRange headsetRange = [routeStr rangeOfString : @"Headset"];
-        
         // Check if the headphones are plugged in
         if(headsetRange.location != NSNotFound) {
             // Headphones are found
@@ -65,6 +66,7 @@
         return false;
     }
 }
+#pragma GCC diagnostic pop
 
 // Number of attached accessories
 + (NSInteger)numberAttachedAccessories {
@@ -93,7 +95,7 @@
         EAAccessory *Accessory;
         // Get the number of accessories connected
         int NumberOfAccessoriesConnected = [AccessoryManager.connectedAccessories count];
-        
+
         // Check to make sure there are accessories connected
         if (NumberOfAccessoriesConnected > 0) {
             // Set up a string for all the accessory names
