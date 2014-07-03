@@ -15,70 +15,70 @@
 // Is the application running on a jailbroken device?
 + (int)jailbroken {
     // Is the device jailbroken?
-    
+
     // Make an int to monitor how many checks are failed
     int motzart = 0;
-    
+
     // URL Check
     if ([self urlCheck] != NOTJAIL) {
         // Jailbroken
         motzart += 3;
     }
-    
+
     // Cydia Check
     if ([self cydiaCheck] != NOTJAIL) {
         // Jailbroken
         motzart += 3;
     }
-    
+
     // Inaccessible Files Check
     if ([self inaccessibleFilesCheck] != NOTJAIL) {
         // Jailbroken
         motzart += 2;
     }
-    
+
     // Plist Check
     if ([self plistCheck] != NOTJAIL) {
         // Jailbroken
         motzart += 2;
     }
-    
+
     // Processes Check
     if ([self processesCheck] != NOTJAIL) {
         // Jailbroken
         motzart += 2;
     }
-    
+
     // FSTab Check
     if ([self fstabCheck] != NOTJAIL) {
         // Jailbroken
         motzart += 1;
     }
-    
+
     // Shell Check
     if ([self systemCheck] != NOTJAIL) {
         // Jailbroken
         motzart += 2;
     }
-    
+
     // Symbolic Link Check
     if ([self symbolicLinkCheck] != NOTJAIL) {
         // Jailbroken
         motzart += 2;
     }
-    
+
     // FilesExist Integrity Check
     if ([self filesExistCheck] != NOTJAIL) {
         // Jailbroken
         motzart += 2;
     }
-    
+
     // Check if the Jailbreak Integer is 3 or more
     if (motzart >= 3) {
         // Jailbroken
         return KFJailbroken;
     }
-    
+
     // Not Jailbroken
     return NOTJAIL;
 }
@@ -133,7 +133,7 @@
                 return KFIFC;
             }
         }
-        
+
         // Shouldn't get this far, return jailbroken
         return NOTJAIL;
     }
@@ -169,7 +169,7 @@
     @try {
         // Make a processes array
         NSArray *processes = [self runningProcesses];
-        
+
         // Check for Cydia in the running processes
         for (NSDictionary * dict in processes) {
             // Define the process name
@@ -186,7 +186,7 @@
                 return KFProcessesOtherOCydia;
             }
         }
-        
+
         // Not Jailbroken
         return NOTJAIL;
     }
@@ -215,6 +215,8 @@
     }
 }
 
+// todo: resolve this error properly
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 // System() available
 + (int)systemCheck {
     @try {
@@ -231,6 +233,7 @@
         return NOTJAIL;
     }
 }
+#pragma GCC diagnostic pop
 
 // Symbolic Link available
 + (int)symbolicLinkCheck {
@@ -277,15 +280,15 @@
     // Define the int array of the kernel's processes
     int mib[4] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0};
     size_t miblen = 4;
-    
+
     // Make a new size and int of the sysctl calls
     size_t size;
     int st = sysctl(mib, miblen, NULL, &size, NULL, 0);
-    
+
     // Make new structs for the processes
     struct kinfo_proc * process = NULL;
     struct kinfo_proc * newprocess = NULL;
-    
+
     // Do get all the processes while there are no errors
     do {
         // Add to the size
@@ -302,18 +305,18 @@
             // Return that nothing happened
             return nil;
         }
-        
+
         // Make the process equal
         process = newprocess;
-        
+
         // Set the st to the next process
         st = sysctl(mib, miblen, process, &size, NULL, 0);
-        
+
     } while (st == -1 && errno == ENOMEM);
-    
+
     // As long as the process list is empty
     if (st == 0){
-        
+
         // And the size of the processes is 0
         if (size % sizeof(struct kinfo_proc) == 0){
             // Define the new process
@@ -335,16 +338,16 @@
                     // Create a new dictionary containing all the process ID's and Name's
                     NSDictionary *dict = [[NSDictionary alloc] initWithObjects:[NSArray arrayWithObjects:processID, processPriority, processName, processStartDate, nil]
                                                                        forKeys:[NSArray arrayWithObjects:@"ProcessID", @"ProcessPriority", @"ProcessName", @"ProcessStartDate", nil]];
-                    
+
                     // Add the dictionary to the array
                     [array addObject:dict];
                 }
                 // Free the process array
                 free(process);
-                
+
                 // Return the process array
                 return array;
-                
+
             }
         }
     }
