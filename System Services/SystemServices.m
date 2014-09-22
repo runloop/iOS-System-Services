@@ -37,7 +37,7 @@
         // Initialize variables
         //[self refreshValues];
     }
-    
+
     return self;
 }
 
@@ -371,7 +371,7 @@
 - (NSDictionary *)getAllSystemInformation {
     // Create an array
     NSDictionary *SystemInformationDict;
-    
+
     // Set up all System Values
     NSString *SystemUptime = [self systemsUptime];
     NSString *DeviceModel = [self deviceModel];
@@ -380,21 +380,21 @@
     NSString *SystemVersion = [self systemsVersion];
     NSString *SystemDeviceTypeFormattedNO = [self systemDeviceTypeNotFormatted];
     NSString *SystemDeviceTypeFormattedYES = [self systemDeviceTypeFormatted];
-    NSString *ScreenWidth = [NSString stringWithFormat:@"%d", [self screenWidth]];
-    NSString *ScreenHeight = [NSString stringWithFormat:@"%d", [self screenHeight]];
+    NSString *ScreenWidth = [NSString stringWithFormat:@"%ld", (long)[self screenWidth]];
+    NSString *ScreenHeight = [NSString stringWithFormat:@"%ld", (long)[self screenHeight]];
     NSString *ScreenBrightness = [NSString stringWithFormat:@"%f", [self screenBrightness]];
     NSString *MultitaskingEnabled = ([self multitaskingEnabled]) ? @"Yes" : @"No";
     NSString *ProximitySensorEnabled = ([self proximitySensorEnabled]) ? @"Yes" : @"No";
     NSString *DebuggerAttached = ([self debuggerAttached]) ? @"Yes" : @"No";
     NSString *PluggedIn = ([self pluggedIn]) ? @"Yes" : @"No";
     NSString *Jailbroken = [NSString stringWithFormat:@"%d", [self jailbroken]];
-    NSString *NumberProcessors = [NSString stringWithFormat:@"%d", [self numberProcessors]];
-    NSString *NumberActiveProcessors = [NSString stringWithFormat:@"%d", [self numberActiveProcessors]];
-    NSString *ProcessorSpeed = [NSString stringWithFormat:@"%d", [self processorSpeed]];
-    NSString *ProcessorBusSpeed = [NSString stringWithFormat:@"%d", [self processorBusSpeed]];
+    NSString *NumberProcessors = [NSString stringWithFormat:@"%ld", (long)[self numberProcessors]];
+    NSString *NumberActiveProcessors = [NSString stringWithFormat:@"%ld", (long)[self numberActiveProcessors]];
+    NSString *ProcessorSpeed = [NSString stringWithFormat:@"%ld", (long)[self processorSpeed]];
+    NSString *ProcessorBusSpeed = [NSString stringWithFormat:@"%ld", (long)[self processorBusSpeed]];
     NSString *AccessoriesAttached = ([self accessoriesAttached]) ? @"Yes" : @"No";
     NSString *HeadphonesAttached = ([self headphonesAttached]) ? @"Yes" : @"No";
-    NSString *NumberAttachedAccessories = [NSString stringWithFormat:@"%d", [self numberAttachedAccessories]];
+    NSString *NumberAttachedAccessories = [NSString stringWithFormat:@"%ld", (long)[self numberAttachedAccessories]];
     NSString *NameAttachedAccessories = [self nameAttachedAccessories];
     NSString *CarrierName = [self carrierName];
     NSString *CarrierCountry = [self carrierCountry];
@@ -443,7 +443,7 @@
     NSString *WiredMemoryYES = [NSString stringWithFormat:@"%f", [self wiredMemoryinPercent]];
     NSString *PurgableMemoryNO = [NSString stringWithFormat:@"%f", [self purgableMemoryinRaw]];
     NSString *PurgableMemoryYES = [NSString stringWithFormat:@"%f", [self purgableMemoryinPercent]];
-    NSString *DeviceOrientation = [NSString stringWithFormat:@"%d", [self deviceOrientation]];
+    NSString *DeviceOrientation = [NSString stringWithFormat:@"%d", (int)[self deviceOrientation]];
     NSString *Country = [self country];
     NSString *Language = [self language];
     NSString *TimeZone = [self timeZoneSS];
@@ -453,7 +453,7 @@
     NSString *UniqueID = [self uniqueID];
     NSString *DeviceSignature = [self deviceSignature];
     NSString *CFUUID = [self cfuuid];
-    
+
     // Check to make sure all values are valid (if not, make them)
     if (SystemUptime == nil || SystemUptime.length <= 0) {
         // Invalid value
@@ -775,7 +775,7 @@
         // Invalid value
         CFUUID = @"Unknown";
     }
-    
+
     // Get all Information in a dictionary
     SystemInformationDict = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:
                                                                  SystemUptime,
@@ -811,7 +811,7 @@
                                                                  FullyCharged,
                                                                  CurrentIPAddress,
                                                                  CurrentMACAddress,
-                                                                 
+
                                                                  ExternalIPAddress,
                                                                  CellIPAddress,
                                                                  CellMACAddress,
@@ -940,13 +940,13 @@
                                                                  @"DeviceSignature",
                                                                  @"CFUUID",
                                                                  nil]];
-    
+
     // Check if Dictionary is populated
     if (SystemInformationDict.count <= 0) {
         // Error, Dictionary is empty
         return nil;
     }
-    
+
     // Successful
     return SystemInformationDict;
 }
