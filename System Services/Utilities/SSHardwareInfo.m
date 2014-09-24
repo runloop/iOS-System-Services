@@ -116,7 +116,7 @@
         // Formatted
         @try {
             // Set up a new Device Type String
-            NSString *NewDeviceType;
+            NSString *NewDeviceType = nil;
             // Set up a struct
             struct utsname DT;
             // Get the system information
@@ -124,42 +124,62 @@
             // Set the device type to the machine type
             DeviceType = [NSString stringWithFormat:@"%s", DT.machine];
 
-            if ([DeviceType isEqualToString:@"i386"])
-                NewDeviceType = @"iPhone Simulator";
-            else if ([DeviceType isEqualToString:@"iPhone1,1"])
-                NewDeviceType = @"iPhone";
-            else if ([DeviceType isEqualToString:@"iPhone1,2"])
-                NewDeviceType = @"iPhone 3G";
-            else if ([DeviceType isEqualToString:@"iPhone2,1"])
-                NewDeviceType = @"iPhone 3GS";
-            else if ([DeviceType isEqualToString:@"iPhone3,1"])
-                NewDeviceType = @"iPhone 4";
-            else if ([DeviceType isEqualToString:@"iPhone4,1"])
-                NewDeviceType = @"iPhone 4S";
-            else if ([DeviceType isEqualToString:@"iPhone5,1"])
-                NewDeviceType = @"iPhone 5";
-			else if ([DeviceType isEqualToString:@"iPhone5,2"])
-				NewDeviceType = @"iPhone 5S";
-			else if ([DeviceType isEqualToString:@"iPhone6,1"])
-				NewDeviceType = @"iPhone 6 Plus";
-			else if ([DeviceType isEqualToString:@"iPhone6,2"])
-				NewDeviceType = @"iPhone 6";
-            else if ([DeviceType isEqualToString:@"iPod1,1"])
-                NewDeviceType = @"1st Gen iPod";
-            else if ([DeviceType isEqualToString:@"iPod2,1"])
-                NewDeviceType = @"2nd Gen iPod";
-            else if ([DeviceType isEqualToString:@"iPod3,1"])
-                NewDeviceType = @"3rd Gen iPod";
-            else if ([DeviceType isEqualToString:@"iPad1,1"])
-                NewDeviceType = @"iPad";
-            else if ([DeviceType isEqualToString:@"iPad2,2"])
-                NewDeviceType = @"iPad 2";
-            else if ([DeviceType isEqualToString:@"iPad3,3"])
-                NewDeviceType = @"New iPad";
-            else if ([DeviceType isEqualToString:@"iPad4,4"])
-                NewDeviceType = @"iPad 4";
-            else if ([DeviceType hasPrefix:@"iPad"])
-                NewDeviceType = @"iPad";
+			NSDictionary *devices = @{
+				@"i386" : @"iPhone Simulator",
+
+				@"iPhone1,1" : @"iPhone",
+				@"iPhone1,2" : @"iPhone 3G",
+				@"iPhone2,1" : @"iPhone 3GS",
+				@"iPhone3,1" : @"iPhone 4 (GSM)",
+				@"iPhone3,2" : @"iPhone 4 (GSM Rev A)",
+				@"iPhone3,3" : @"iPhone 4 (CDMA)",
+				@"iPhone4,1" : @"iPhone 4S",
+				@"iPhone5,1" : @"iPhone 5 (GSM/LTE)",
+				@"iPhone5,2" : @"iPhone 5 (CDMA/LTE)",
+				@"iPhone5,3" : @"iPhone 5c (GSM/LTE)",
+				@"iPhone5,4" : @"iPhone 5c (CDMA/LTE)",
+				@"iPhone6,1" : @"iPhone 5s (GSM/LTE)",
+				@"iPhone6,2" : @"iPhone 5s (CDMA/LTE)",
+				@"iPhone7,1" : @"iPhone 6 Plus",
+				@"iPhone7,2" : @"iPhone 6",
+
+				@"iPod1,1" : @"iPod touch (1st generation)",
+				@"iPod2,1" : @"iPod touch (2nd generation)",
+				@"iPod3,1" : @"iPod touch (3rd generation)",
+				@"iPod4,1" : @"iPod touch (4th generation)",
+				@"iPod5,1" : @"iPod touch (5th generation)",
+
+				@"iPad1,1" : @"iPad",
+				@"iPad2,1" : @"iPad 2 (Wi-Fi)",
+				@"iPad2,2" : @"iPad 2 (GSM)",
+				@"iPad2,3" : @"iPad 2 (CDMA)",
+				@"iPad2,4" : @"iPad 2 (Wi-Fi, A5R)",
+				@"iPad2,5" : @"iPad mini (Wi-Fi)",
+				@"iPad2,6" : @"iPad mini (GSM/LTE)",
+				@"iPad2,7" : @"iPad mini (CDMA/LTE)",
+				@"iPad3,1" : @"iPad (3rd generation, Wi-Fi)",
+				@"iPad3,2" : @"iPad (3rd generation, GSM/LTE)",
+				@"iPad3,3" : @"iPad (3rd generation, CDMA/LTE)",
+				@"iPad3,4" : @"iPad (4th generation, Wi-Fi)",
+				@"iPad3,5" : @"iPad (4th generation, GSM/LTE)",
+				@"iPad3,6" : @"iPad (4th generation, CDMA/LTE)",
+				@"iPad4,1" : @"iPad Air (Wi-Fi)",
+				@"iPad4,2" : @"iPad Air (LTE)",
+				@"iPad4,4" : @"iPad mini with Retina display (Wi-Fi)",
+				@"iPad4,5" : @"iPad mini with Retina display (LTE)",
+
+			};
+
+			NewDeviceType = devices[DeviceType];
+			if(NewDeviceType == nil && [DeviceType hasPrefix:@"iPhone"]) {
+				NewDeviceType = [NSString stringWithFormat:@"iPhone (Unknown model: %@", DeviceType];
+			}
+			else if(NewDeviceType == nil && [DeviceType hasPrefix:@"iPod"]) {
+				NewDeviceType = [NSString stringWithFormat:@"iPod (Unknown model: %@", DeviceType];
+			}
+			else if(NewDeviceType == nil && [DeviceType hasPrefix:@"iPad"]) {
+				NewDeviceType = [NSString stringWithFormat:@"iPad (Unknown model: %@", DeviceType];
+			}
 
             // Return the new device type
             return NewDeviceType;
